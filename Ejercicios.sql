@@ -56,8 +56,65 @@ BEGIN
 END;
 /
 
-
+rf
    
 /* 3) Indique cuantos chilenos hay en la base de datos que trabajen en
 empresas extranjeras. */
+
+
+4) Muestre todos los datos de la empresa que tiene más empleados, si hubieran más entonces muestre solo una empresa.
+*/
+DECLARE
+    var_maxEmpleados number := 0; 
+    var_empresa varchar2(20) := ' ';
+    var_datosEmpresa varchar2(500) := ' ';
+BEGIN
+    select MAX(count(emp.ID)) as nEmpleados
+    into var_maxEmpleados
+    from empresa e
+    join empleado emp on e.rut = emp.RUT_EMPRESA
+    group by e.NOMBRE_FANTASIA;
+    
+    select e.NOMBRE_FANTASIA
+    into var_empresa
+    from empresa e
+    join empleado emp on e.rut = emp.RUT_EMPRESA
+    group by e.NOMBRE_FANTASIA, e.RUT
+    having count(emp.ID) = var_maxEmpleados;
+    
+    select 'Datos de la empresa: '||NOMBRE_FANTASIA||', Rut:'||RUT||'-'||DV||', Razon Social:'||RAZON_SOCIAL||', Giro:'||GIRO||' Nro empleados: '||var_maxEmpleados
+    into var_datosEmpresa 
+    from empresa
+    where NOMBRE_FANTASIA = var_empresa ;
+       
+    SYS.DBMS_OUTPUT.PUT_LINE(var_datosEmpresa);
+END;
+/
+
+/* 5) Muestre todos los datos de la empresa que tenga menos empleados.*/
+DECLARE
+    var_minEmpleados number := 0; 
+    var_empresa varchar2(20) := ' ';
+     var_datosEmpresa varchar2(500) := ' ';
+BEGIN
+    select MIN(count(emp.ID)) as nEmpleados
+    into var_minEmpleados
+    from empresa e
+    join empleado emp on e.rut = emp.RUT_EMPRESA
+    group by e.NOMBRE_FANTASIA;
+    
+    select e.NOMBRE_FANTASIA
+    into var_empresa
+    from empresa e
+    join empleado emp on e.rut = emp.RUT_EMPRESA
+    group by e.NOMBRE_FANTASIA, e.RUT
+    having count(emp.ID) = var_minEmpleados;
+    
+    select 'Datos de la empresa: '||NOMBRE_FANTASIA||', Rut:'||RUT||'-'||DV||', Razon Social:'||RAZON_SOCIAL||', Giro:'||GIRO ||' Nro empleados: '||var_minEmpleados
+    into var_datosEmpresa 
+    from empresa
+    where NOMBRE_FANTASIA = var_empresa ;
+    SYS.DBMS_OUTPUT.PUT_LINE(var_datosEmpresa);
+END;
+/
 
