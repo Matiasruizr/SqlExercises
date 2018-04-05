@@ -118,3 +118,30 @@ BEGIN
 END;
 /
 
+
+/* 6) Indique cuantas empresas se encuentren en Chile 
+fuera de la región metropolitana de Santiago.*/
+
+DECLARE
+  var_empresasFueraDeSantiago number := 0;
+BEGIN
+  select count(e.NOMBRE_FANTASIA)
+  into var_empresasFueraDeSantiago
+  from empresa e
+  join comuna c on e.comuna = c.id
+  join region r on c.ID_REGION = r.ID
+  where r.NOMBRE not like 'REGIÓN METROPOLITANA DE SANTIAGO';
+  
+  DBMS_OUTPUT.PUT_LINE('El numero de empresas que están fuera de santiago es de: '||var_empresasFueraDeSantiago);
+END;
+/
+
+/* 7) Indique cuantas empresas poseen al menos 2 empleados
+los que adicionalmente deben tener su dirección fuera de la región metropolitana.*/
+
+select * from empleado emp join;
+
+select e.NOMBRE_FANTASIA, count(emp.id) from empresa e join empleado emp on e.RUT = emp.RUT_EMPRESA
+group by e.NOMBRE_FANTASIA
+having count(emp.id) >= 2;
+
